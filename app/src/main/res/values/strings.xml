@@ -77,4 +77,81 @@
     <string name="about_version">Version %1$s</string>
     <string name="about_desc">SONIC REMOTE is a transparent remote-support app built by SONICTEAM. It never works in secret.</string>
     <string name="about_view_terms">Read terms and disclaimer</string>
+
+    <!-- Device / pairing / session -->
+    <string name="device_title">This device</string>
+    <string name="device_code_label">Pairing code</string>
+    <string name="device_code_hint">Share this code only with someone you trust. They need it to request a session with this phone.</string>
+    <string name="device_registering">Registering this device…</string>
+    <string name="device_retry">Retry</string>
+    <string name="copy">Copy</string>
+    <string name="copied">Copied</string>
+    <string name="device_revoke">Revoke this device</string>
+    <string name="device_revoke_title">Revoke this device?</string>
+    <string name="device_revoke_body">The current pairing code stops working and a new device identity with a new code is created.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="btn_open_agent">Open Agent mode</string>
+    <string name="btn_open_controller">Open Controller mode</string>
+    <string name="active_session_banner">Active session with %1$s</string>
+    <string name="btn_open_session">Open session</string>
+
+    <string name="agent_screen_title">Agent</string>
+    <string name="agent_waiting">No pending requests. Keep this screen open to receive requests instantly.</string>
+    <string name="incoming_title">Incoming request</string>
+    <string name="incoming_from">Device: %1$s</string>
+    <string name="incoming_account">Account: %1$s</string>
+    <string name="incoming_expires">Expires in %1$s</string>
+    <string name="approve">Approve</string>
+    <string name="reject">Reject</string>
+    <string name="approve_note">Approving starts a support session. Screen sharing will always ask for Android's own permission.</string>
+
+    <string name="controller_screen_title">Controller</string>
+    <string name="enter_code">Agent's pairing code</string>
+    <string name="controller_hint">Ask the person you are helping to open Agent mode and read you the pairing code shown on their phone.</string>
+    <string name="send_request">Send request</string>
+    <string name="waiting_for">Waiting for %1$s to approve… (%2$s)</string>
+    <string name="req_rejected">The request was rejected.</string>
+    <string name="req_expired">The request expired.</string>
+    <string name="btn_dismiss">OK</string>
+
+    <string name="session_title">Session</string>
+    <string name="session_with">Connected with %1$s</string>
+    <string name="session_role_agent">You are the Agent</string>
+    <string name="session_role_controller">You are the Controller</string>
+    <string name="session_expires">Ends in %1$s</string>
+    <string name="session_note">The session is approved on both accounts. Screen streaming arrives in the next update.</string>
+    <string name="end_session">End session</string>
+    <string name="revoke_consent">Revoke consent and end</string>
+
+    <string name="fn_invalid_code">That code is not valid.</string>
+    <string name="fn_too_many">Too many wrong codes. Try again in 10 minutes.</string>
+    <string name="fn_same_account">You cannot connect to a device on your own account.</string>
+    <string name="fn_device_not_owned">This device is not registered to your account.</string>
+    <string name="fn_agent_busy">That device is already in a session.</string>
+    <string name="fn_duplicate">A request to that device is already pending.</string>
+    <string name="fn_expired">The request has expired.</string>
+    <string name="fn_resolved">This request was already answered.</string>
+    <string name="fn_not_found">Not found.</string>
+    <string name="fn_device_unavailable">A device is no longer available.</string>
+    <string name="fn_unauthorized">Please sign in again.</string>
+    <string name="fn_not_deployed">The backend functions are not deployed yet.</string>
+    <string name="fn_network">Cannot reach the server. Check your connection.</string>
+    <string name="fn_unknown">Request failed. Please try again.</string>
+
+    <!-- Screen sharing -->
+    <string name="share_channel_name">Screen sharing</string>
+    <string name="share_notif_title">SONIC REMOTE is sharing your screen</string>
+    <string name="share_notif_text">Shared with %1$s. Tap Stop to end it at any time.</string>
+    <string name="share_notif_stop">Stop sharing</string>
+    <string name="share_note_agent">Tap the button to let the other person see your screen. Android will ask for your permission, and a notification with a Stop button stays visible the whole time.</string>
+    <string name="share_start">Start sharing my screen</string>
+    <string name="share_connecting">Connecting…</string>
+    <string name="share_live">Your screen is being shared</string>
+    <string name="share_stop">Stop sharing</string>
+    <string name="share_error">Sharing stopped because of a connection problem.</string>
+    <string name="notif_perm_needed">Notification permission is required so sharing is always visible to you. Please allow it and try again.</string>
+    <string name="viewer_waiting">Waiting for the Agent to start sharing…</string>
+    <string name="viewer_connecting">Connecting…</string>
+    <string name="viewer_failed">Connection failed. End the session and try again.</string>
 </resources>

@@ -9,8 +9,9 @@ Transparent, consent-based Android remote support between two independent accoun
 | Branding, logo/icon, first-launch terms & disclaimer, AR/EN + RTL | implemented |
 | Email/password registration, login, persistent encrypted session, logout | implemented |
 | Backend: RLS migration + 5 Edge Functions (see `supabase/`) | implemented, tested locally (SQL) |
-| Device registration, pairing UI, sessions UI | next |
-| WebRTC signaling client, MediaProjection foreground service | next |
+| Device registration (own pairing code, revoke), pairing requests (Realtime + poll fallback), approve/reject, session start/end | implemented (needs two-phone test) |
+| WebRTC signaling (Realtime + REST catch-up), MediaProjection foreground service with Stop notification, Controller live view | implemented (needs two-phone test) |
+| Remote touch control of the other phone | NOT available: Android only allows it via Accessibility, which this project deliberately does not use |
 
 Nothing is marked finished until it has been built by CI and tested on two phones.
 

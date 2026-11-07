@@ -30,6 +30,9 @@ fun SonicApp(vm: AppViewModel, onToggleLanguage: () -> Unit, onExit: () -> Unit)
                 )
                 Screen.Auth -> AuthScreen(vm, onToggleLanguage)
                 Screen.Home -> HomeScreen(vm, onToggleLanguage)
+                Screen.Agent -> AgentScreen(vm, onToggleLanguage)
+                Screen.Controller -> ControllerScreen(vm, onToggleLanguage)
+                Screen.Session -> SessionScreen(vm, onToggleLanguage)
                 Screen.About -> AboutScreen(
                     onBack = { vm.go(Screen.Home) },
                     onViewTerms = { vm.go(Screen.TermsView) },

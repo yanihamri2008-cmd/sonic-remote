@@ -73,4 +73,79 @@
     <string name="about_version">الإصدار %1$s</string>
     <string name="about_desc">SONIC REMOTE تطبيق دعم عن بُعد شفاف من تطوير SONICTEAM. لا يعمل في الخفاء أبداً.</string>
     <string name="about_view_terms">قراءة الشروط وإخلاء المسؤولية</string>
+
+    <string name="device_title">هذا الجهاز</string>
+    <string name="device_code_label">رمز الاقتران</string>
+    <string name="device_code_hint">شارك هذا الرمز فقط مع شخص تثق به. يحتاجه ليطلب جلسة مع هذا الهاتف.</string>
+    <string name="device_registering">جارٍ تسجيل هذا الجهاز…</string>
+    <string name="device_retry">إعادة المحاولة</string>
+    <string name="copy">نسخ</string>
+    <string name="copied">تم النسخ</string>
+    <string name="device_revoke">إلغاء تفعيل هذا الجهاز</string>
+    <string name="device_revoke_title">إلغاء تفعيل هذا الجهاز؟</string>
+    <string name="device_revoke_body">سيتوقف الرمز الحالي عن العمل، وتُنشأ هوية جهاز جديدة برمز جديد.</string>
+    <string name="confirm">تأكيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="btn_open_agent">فتح وضع الوكيل</string>
+    <string name="btn_open_controller">فتح وضع المتحكِّم</string>
+    <string name="active_session_banner">جلسة نشطة مع %1$s</string>
+    <string name="btn_open_session">فتح الجلسة</string>
+
+    <string name="agent_screen_title">الوكيل</string>
+    <string name="agent_waiting">لا توجد طلبات حالياً. أبقِ هذه الشاشة مفتوحة لاستقبال الطلبات فوراً.</string>
+    <string name="incoming_title">طلب وارد</string>
+    <string name="incoming_from">الجهاز: %1$s</string>
+    <string name="incoming_account">الحساب: %1$s</string>
+    <string name="incoming_expires">ينتهي خلال %1$s</string>
+    <string name="approve">موافقة</string>
+    <string name="reject">رفض</string>
+    <string name="approve_note">الموافقة تبدأ جلسة دعم. ومشاركة الشاشة ستطلب دائماً إذن أندرويد الرسمي.</string>
+
+    <string name="controller_screen_title">المتحكِّم</string>
+    <string name="enter_code">رمز اقتران الوكيل</string>
+    <string name="controller_hint">اطلب من الشخص الذي تساعده فتح وضع الوكيل وقراءة رمز الاقتران الظاهر على هاتفه.</string>
+    <string name="send_request">إرسال الطلب</string>
+    <string name="waiting_for">بانتظار موافقة %1$s… (%2$s)</string>
+    <string name="req_rejected">تم رفض الطلب.</string>
+    <string name="req_expired">انتهت صلاحية الطلب.</string>
+    <string name="btn_dismiss">حسناً</string>
+
+    <string name="session_title">الجلسة</string>
+    <string name="session_with">متصل مع %1$s</string>
+    <string name="session_role_agent">أنت الوكيل</string>
+    <string name="session_role_controller">أنت المتحكِّم</string>
+    <string name="session_expires">تنتهي خلال %1$s</string>
+    <string name="session_note">تمت الموافقة على الجلسة في الحسابين. بث الشاشة يصل في التحديث القادم.</string>
+    <string name="end_session">إنهاء الجلسة</string>
+    <string name="revoke_consent">سحب الموافقة وإنهاء</string>
+
+    <string name="fn_invalid_code">هذا الرمز غير صحيح.</string>
+    <string name="fn_too_many">أخطأت في الرمز مرات كثيرة. حاول بعد 10 دقائق.</string>
+    <string name="fn_same_account">لا يمكنك الاتصال بجهاز على حسابك نفسه.</string>
+    <string name="fn_device_not_owned">هذا الجهاز غير مسجّل على حسابك.</string>
+    <string name="fn_agent_busy">هذا الجهاز في جلسة أخرى حالياً.</string>
+    <string name="fn_duplicate">يوجد طلب معلّق لهذا الجهاز بالفعل.</string>
+    <string name="fn_expired">انتهت صلاحية الطلب.</string>
+    <string name="fn_resolved">تمت الإجابة على هذا الطلب مسبقاً.</string>
+    <string name="fn_not_found">غير موجود.</string>
+    <string name="fn_device_unavailable">أحد الجهازين لم يعد متاحاً.</string>
+    <string name="fn_unauthorized">يرجى تسجيل الدخول مجدداً.</string>
+    <string name="fn_not_deployed">دوال الخادم لم تُنشر بعد.</string>
+    <string name="fn_network">تعذّر الوصول إلى الخادم. تحقق من اتصالك.</string>
+    <string name="fn_unknown">فشل الطلب. حاول مرة أخرى.</string>
+
+    <string name="share_channel_name">مشاركة الشاشة</string>
+    <string name="share_notif_title">SONIC REMOTE يشارك شاشتك الآن</string>
+    <string name="share_notif_text">تتم المشاركة مع %1$s. اضغط إيقاف لإنهائها في أي وقت.</string>
+    <string name="share_notif_stop">إيقاف المشاركة</string>
+    <string name="share_note_agent">اضغط الزر ليتمكن الطرف الآخر من رؤية شاشتك. سيطلب أندرويد إذنك، ويبقى إشعار ظاهر مع زر إيقاف طوال المدة.</string>
+    <string name="share_start">ابدأ مشاركة شاشتي</string>
+    <string name="share_connecting">جارٍ الاتصال…</string>
+    <string name="share_live">شاشتك تُشارَك الآن</string>
+    <string name="share_stop">إيقاف المشاركة</string>
+    <string name="share_error">توقفت المشاركة بسبب مشكلة في الاتصال.</string>
+    <string name="notif_perm_needed">إذن الإشعارات مطلوب كي تكون المشاركة ظاهرة لك دائماً. اسمح به ثم أعد المحاولة.</string>
+    <string name="viewer_waiting">بانتظار أن يبدأ الوكيل مشاركة شاشته…</string>
+    <string name="viewer_connecting">جارٍ الاتصال…</string>
+    <string name="viewer_failed">فشل الاتصال. أنهِ الجلسة وحاول مجدداً.</string>
 </resources>
