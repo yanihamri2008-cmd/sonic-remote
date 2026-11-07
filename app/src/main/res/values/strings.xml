@@ -104,10 +104,10 @@
     <string name="incoming_expires">Expires in %1$s</string>
     <string name="approve">Approve</string>
     <string name="reject">Reject</string>
-    <string name="approve_note">Approving starts a support session. Screen sharing will always ask for Android's own permission.</string>
+    <string name="approve_note">Approving starts a support session. Screen sharing will always ask for Android\'s own permission.</string>
 
     <string name="controller_screen_title">Controller</string>
-    <string name="enter_code">Agent's pairing code</string>
+    <string name="enter_code">Agent\'s pairing code</string>
     <string name="controller_hint">Ask the person you are helping to open Agent mode and read you the pairing code shown on their phone.</string>
     <string name="send_request">Send request</string>
     <string name="waiting_for">Waiting for %1$s to approve… (%2$s)</string>
