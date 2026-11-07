@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SONIC REMOTE</string>
+    <string name="by_team">من SONICTEAM</string>
+    <string name="tagline">دعم عن بُعد آمن وبموافقة صريحة</string>
+    <string name="copyright">© 2026 SONICTEAM. جميع الحقوق محفوظة.</string>
+    <string name="switch_language">English</string>
+    <string name="btn_back">رجوع</string>
+
+    <string name="terms_title">الشروط وإخلاء المسؤولية</string>
+    <string name="terms_intro">يرجى قراءة ما يلي بعناية قبل استخدام SONIC REMOTE.</string>
+    <string name="t1_title">١. ما الذي يفعله التطبيق</string>
+    <string name="t1_body">يتيح SONIC REMOTE لشخص (المتحكِّم) أن يطلب دعماً عن بُعد من شخص آخر (الوكيل). لا يبدأ أي شيء إلا بموافقة صريحة من الوكيل. يعرض هاتف الوكيل نافذة أندرويد الرسمية لمشاركة الشاشة وإشعاراً ظاهراً طوال مدة المشاركة.</string>
+    <string name="t2_title">٢. الموافقة شرط أساسي</string>
+    <string name="t2_body">استخدم SONIC REMOTE فقط بعلم صاحب الجهاز وبإذنه. يُمنع استخدامه لمراقبة هاتف أي شخص أو تسجيله أو الدخول إليه دون موافقته الواضحة، وقد يُعدّ ذلك جريمة.</string>
+    <string name="t3_title">٣. مسؤوليتك</string>
+    <string name="t3_body">أنت وحدك المسؤول عن طريقة استخدامك للتطبيق، وعن الأشخاص الذين تتصل بهم، وعن كل ما يظهر على شاشتك أثناء المشاركة (رسائل، كلمات مرور، بيانات بنكية، صور خاصة). لا تشارك شاشتك وفيها معلومات حساسة ظاهرة إلا إذا كنت تثق بالطرف الآخر تماماً.</string>
+    <string name="t4_title">٤. عدم تحمّل المسؤولية</string>
+    <string name="t4_body">يُقدَّم SONIC REMOTE كما هو، دون أي ضمانات من أي نوع. وبأقصى حد يسمح به القانون، فإن SONICTEAM غير مسؤولة عن أي خسارة أو ضرر أو تسرّب بيانات أو خسارة مالية أو مشكلة في الجهاز أو إساءة استخدام ناتجة عن استخدام التطبيق، أو عن تصرفات الطرف الآخر في الجلسة، أو عن انقطاع الخدمة.</string>
+    <string name="t5_title">٥. الاستخدام المحظور</string>
+    <string name="t5_body">لا تستخدم التطبيق في الاحتيال أو النصب أو الملاحقة أو المضايقة أو الدخول غير المصرّح به أو أي نشاط غير قانوني. يحق لـ SONICTEAM إيقاف الحسابات التي تسيء استخدام الخدمة.</string>
+    <string name="t6_title">٦. الخصوصية والبيانات</string>
+    <string name="t6_body">لتشغيل الخدمة نعالج بريدك الإلكتروني واسم جهازك وسجلات الجلسات (من اتصل، ومتى، وكيف انتهت) ضمن سجل تدقيق. ينتقل فيديو الشاشة مباشرة بين الهاتفين، أو عبر خادم وسيط لا يستطيع قراءته، ولا يقوم SONIC REMOTE بتسجيله.</string>
+    <string name="t7_title">٧. تحكّمك الكامل</string>
+    <string name="t7_body">يمكنك إيقاف المشاركة في أي وقت بزر الإيقاف أو من الإشعار، وإنهاء الجلسة، أو تسجيل الخروج متى شئت.</string>
+    <string name="t8_title">٨. التعديلات</string>
+    <string name="t8_body">قد تتغير هذه الشروط. وإذا تغيّرت فسيُطلب منك الموافقة على النسخة الجديدة.</string>
+    <string name="terms_version_note">الإصدار 1 · نوفمبر 2026</string>
+    <string name="terms_agree">قرأتُ هذه الشروط وأوافق عليها. وأدرك أن SONICTEAM غير مسؤولة عن طريقة استخدامي للتطبيق.</string>
+    <string name="terms_accept">أوافق وأتابع</string>
+    <string name="terms_decline">لا أوافق وخروج</string>
+
+    <string name="tab_login">تسجيل الدخول</string>
+    <string name="tab_register">إنشاء حساب</string>
+    <string name="auth_hint">كل هاتف يستخدم حسابه الخاص.</string>
+    <string name="field_email">البريد الإلكتروني</string>
+    <string name="field_password">كلمة المرور</string>
+    <string name="field_confirm">تأكيد كلمة المرور</string>
+    <string name="show">إظهار</string>
+    <string name="hide">إخفاء</string>
+    <string name="btn_login">تسجيل الدخول</string>
+    <string name="btn_register">إنشاء حساب</string>
+    <string name="err_invalid_email">أدخل بريداً إلكترونياً صحيحاً.</string>
+    <string name="err_short_password">يجب ألا تقل كلمة المرور عن 8 أحرف.</string>
+    <string name="err_password_mismatch">كلمتا المرور غير متطابقتين.</string>
+    <string name="err_invalid_credentials">البريد الإلكتروني أو كلمة المرور غير صحيحة.</string>
+    <string name="err_email_not_confirmed">يرجى تأكيد بريدك الإلكتروني أولاً. تحقق من صندوق الوارد.</string>
+    <string name="err_already_registered">هذا البريد مسجّل مسبقاً. جرّب تسجيل الدخول.</string>
+    <string name="err_weak_password">كلمة المرور ضعيفة. استخدم 8 أحرف على الأقل.</string>
+    <string name="err_rate_limited">محاولات كثيرة. انتظر دقيقة ثم حاول مجدداً.</string>
+    <string name="err_signup_disabled">إنشاء الحسابات متوقف حالياً.</string>
+    <string name="err_network">تعذّر الوصول إلى الخادم. تحقق من اتصالك بالإنترنت.</string>
+    <string name="err_not_configured">التطبيق غير مهيّأ بعد (مفتاح Supabase مفقود).</string>
+    <string name="err_unknown">حدث خطأ ما. حاول مرة أخرى.</string>
+    <string name="info_confirm_email">تم إنشاء الحساب. أرسلنا رابط تأكيد إلى بريدك. أكّده ثم سجّل الدخول.</string>
+
+    <string name="home_title">لوحة التحكم</string>
+    <string name="home_signed_in">مسجّل الدخول باسم</string>
+    <string name="agent_title">وضع الوكيل</string>
+    <string name="agent_desc">شارك شاشتك مع شخص تثق به. أنت توافق على كل طلب.</string>
+    <string name="controller_title">وضع المتحكِّم</string>
+    <string name="controller_desc">اطلب جلسة دعم مع هاتف آخر.</string>
+    <string name="coming_soon">قريباً في التحديث القادم</string>
+    <string name="safety_title">كيف يحميك SONIC REMOTE</string>
+    <string name="safety_1">لا يبدأ شيء دون موافقة الوكيل.</string>
+    <string name="safety_2">يعرض أندرويد نافذة إذن مشاركة الشاشة الرسمية.</string>
+    <string name="safety_3">يبقى إشعار ظاهر أثناء المشاركة مع زر إيقاف.</string>
+    <string name="safety_4">يستطيع أي طرف إنهاء الجلسة في أي وقت.</string>
+    <string name="btn_about">حول التطبيق والأمان</string>
+    <string name="btn_logout">تسجيل الخروج</string>
+
+    <string name="about_title">حول التطبيق</string>
+    <string name="about_version">الإصدار %1$s</string>
+    <string name="about_desc">SONIC REMOTE تطبيق دعم عن بُعد شفاف من تطوير SONICTEAM. لا يعمل في الخفاء أبداً.</string>
+    <string name="about_view_terms">قراءة الشروط وإخلاء المسؤولية</string>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SONIC REMOTE</string>
+    <string name="by_team">by SONICTEAM</string>
+    <string name="tagline">Secure, consent-based remote support</string>
+    <string name="copyright">© 2026 SONICTEAM. All rights reserved.</string>
+    <string name="switch_language">العربية</string>
+    <string name="btn_back">Back</string>
+
+    <!-- Terms -->
+    <string name="terms_title">Terms &amp; Disclaimer</string>
+    <string name="terms_intro">Please read this carefully before using SONIC REMOTE.</string>
+    <string name="t1_title">1. What the app does</string>
+    <string name="t1_body">SONIC REMOTE lets one person (the Controller) ask another person (the Agent) for remote support. Nothing starts unless the Agent explicitly approves it. The Agent\'s phone shows Android\'s own screen-sharing prompt and a visible notification for as long as the screen is shared.</string>
+    <string name="t2_title">2. Consent is required</string>
+    <string name="t2_body">Only use SONIC REMOTE with the knowledge and permission of the owner of the device. Using it to watch, record, or access someone\'s phone without their clear consent is prohibited and may be a crime.</string>
+    <string name="t3_title">3. Your responsibility</string>
+    <string name="t3_body">You alone are responsible for how you use the app, for the people you connect with, and for everything visible on your screen while sharing (messages, passwords, banking details, private photos). Do not share your screen while sensitive information is visible unless you fully trust the other person.</string>
+    <string name="t4_title">4. No liability</string>
+    <string name="t4_body">SONIC REMOTE is provided as is, without warranties of any kind. To the maximum extent permitted by law, SONICTEAM is not responsible or liable for any loss, damage, data exposure, financial loss, device problem, or misuse arising from the use of the app, from the actions of the other person in a session, or from service interruptions.</string>
+    <string name="t5_title">5. Prohibited use</string>
+    <string name="t5_body">Do not use the app for fraud, scams, stalking, harassment, unauthorized access, or any illegal activity. SONICTEAM may suspend accounts that abuse the service.</string>
+    <string name="t6_title">6. Privacy and data</string>
+    <string name="t6_body">To run the service we process your account email, your device name, and session records (who connected, when, and how it ended) in an audit log. Screen video travels directly between the two phones, or through a relay that cannot read it, and SONIC REMOTE does not record it.</string>
+    <string name="t7_title">7. Your control</string>
+    <string name="t7_body">You can stop sharing at any time with the Stop button or the notification action, end a session, or sign out whenever you want.</string>
+    <string name="t8_title">8. Changes</string>
+    <string name="t8_body">These terms may change. If they do, you will be asked to accept the new version.</string>
+    <string name="terms_version_note">Version 1 · November 2026</string>
+    <string name="terms_agree">I have read and I agree to these terms. I understand that SONICTEAM is not responsible for how I use the app.</string>
+    <string name="terms_accept">Accept and continue</string>
+    <string name="terms_decline">Decline and exit</string>
+
+    <!-- Auth -->
+    <string name="tab_login">Sign in</string>
+    <string name="tab_register">Create account</string>
+    <string name="auth_hint">Each phone uses its own account.</string>
+    <string name="field_email">Email</string>
+    <string name="field_password">Password</string>
+    <string name="field_confirm">Confirm password</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
+    <string name="btn_login">Sign in</string>
+    <string name="btn_register">Create account</string>
+    <string name="err_invalid_email">Enter a valid email address.</string>
+    <string name="err_short_password">Password must be at least 8 characters.</string>
+    <string name="err_password_mismatch">Passwords do not match.</string>
+    <string name="err_invalid_credentials">Wrong email or password.</string>
+    <string name="err_email_not_confirmed">Please confirm your email first. Check your inbox.</string>
+    <string name="err_already_registered">This email is already registered. Try signing in.</string>
+    <string name="err_weak_password">Password is too weak. Use at least 8 characters.</string>
+    <string name="err_rate_limited">Too many attempts. Please wait a minute and try again.</string>
+    <string name="err_signup_disabled">Registration is currently disabled.</string>
+    <string name="err_network">Cannot reach the server. Check your internet connection.</string>
+    <string name="err_not_configured">The app is not configured yet (missing Supabase key).</string>
+    <string name="err_unknown">Something went wrong. Please try again.</string>
+    <string name="info_confirm_email">Account created. We sent a confirmation link to your email. Confirm it, then sign in.</string>
+
+    <!-- Home -->
+    <string name="home_title">Dashboard</string>
+    <string name="home_signed_in">Signed in as</string>
+    <string name="agent_title">Agent mode</string>
+    <string name="agent_desc">Share your screen with someone you trust. You approve every request.</string>
+    <string name="controller_title">Controller mode</string>
+    <string name="controller_desc">Request a support session with another phone.</string>
+    <string name="coming_soon">Coming in the next update</string>
+    <string name="safety_title">How SONIC REMOTE protects you</string>
+    <string name="safety_1">Nothing starts without the Agent\'s approval.</string>
+    <string name="safety_2">Android shows its own screen-sharing permission prompt.</string>
+    <string name="safety_3">A notification stays visible while sharing, with a Stop button.</string>
+    <string name="safety_4">Either side can end the session at any time.</string>
+    <string name="btn_about">About and safety</string>
+    <string name="btn_logout">Sign out</string>
+
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_desc">SONIC REMOTE is a transparent remote-support app built by SONICTEAM. It never works in secret.</string>
+    <string name="about_view_terms">Read terms and disclaimer</string>
+</resources>

@@ -18,11 +18,17 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # Pinned: AGP 8.7.3 needs Gradle 8.9+ and is not compatible with Gradle 9.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
 
       - name: Build debug APK
-        run: gradle assembleDebug
+        env:
+          # Public client key (publishable). Add it under Settings > Secrets and variables > Actions.
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

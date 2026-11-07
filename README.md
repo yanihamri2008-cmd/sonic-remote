@@ -1,37 +1,29 @@
-# SONIC REMOTE — Android starter
+# SONIC REMOTE — by SONICTEAM
 
-This is a **starter scaffold**, not a finished remote-control product.
+Transparent, consent-based Android remote support between two independent accounts
+(**Controller** requests, **Agent** explicitly approves).
 
-## Included
-- One Android app with separate Controller / Agent entry points.
-- An explicit consent screen for the Agent side.
-- A visible session status and a Stop button.
-- Supabase configuration placeholders.
-- The existing Supabase schema is **not recreated or modified** by this package.
+## Status
+| Area | State |
+|---|---|
+| Branding, logo/icon, first-launch terms & disclaimer, AR/EN + RTL | implemented |
+| Email/password registration, login, persistent encrypted session, logout | implemented |
+| Backend: RLS migration + 5 Edge Functions (see `supabase/`) | implemented, tested locally (SQL) |
+| Device registration, pairing UI, sessions UI | next |
+| WebRTC signaling client, MediaProjection foreground service | next |
 
-## Important safety design
-- No hidden operation, persistence, stealth, lock-screen bypass, or silent screen capture.
-- Screen sharing must use Android's system MediaProjection consent prompt.
-- The Agent user must be able to stop a session at any time.
-- Do not add remote input/accessibility control until authorization and security review are complete.
+Nothing is marked finished until it has been built by CI and tested on two phones.
 
-## Open in Android Studio
-1. Extract this ZIP.
-2. Open the `SONIC-REMOTE` folder in Android Studio.
-3. Let Gradle sync.
-4. Run on an Android device.
+## Build
+GitHub Actions builds the debug APK on every push to `main` (Actions -> latest run -> Artifacts).
+Required repository secret: `SUPABASE_PUBLISHABLE_KEY` (the *publishable* key only — never a
+secret/service-role key). Local builds: put `SUPABASE_PUBLISHABLE_KEY=...` in `local.properties`.
 
-## Supabase setup
-Open `app/build.gradle.kts` and replace:
-- `SUPABASE_URL`
-- `SUPABASE_PUBLISHABLE_KEY`
+The debug APK is signed with the fixed, non-secret `keystore/sonicteam-debug.jks`, so new builds
+install over old ones. A real release keystore must be created and kept as a GitHub secret
+before any public release.
 
-Use the project's URL and **Publishable key** only. Never put a `service_role` or secret key in an Android app or GitHub repository.
-
-The app currently displays the consent flow locally. Backend authentication, device registration, secure pairing, signaling, and WebRTC are not implemented yet.
-
-## Upload to your private GitHub repository
-Extract the ZIP first. Upload the **contents** of this folder to the root of your private repository:
-https://github.com/yanihamri2008-cmd/sonic-remote
-
-Do not upload the ZIP as the only repository file if you want GitHub Actions/Android Studio to see the project structure.
+## Terms
+Terms text lives in `res/values*/strings.xml` (`t1_*` ... `t8_*`). When you change them, bump
+`Prefs.TERMS_VERSION` so every user is asked to accept again. Have a lawyer review the text
+before public distribution.
