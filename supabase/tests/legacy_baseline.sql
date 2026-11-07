@@ -1,0 +1,24 @@
+do $$ begin if not exists (select 1 from pg_roles where rolname=$q$anon$q$) then create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls; end if; end $$;
+create schema auth; create table auth.users(id uuid primary key);
+create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true),'')::uuid $$;
+grant usage on schema auth to authenticated, anon; grant usage on schema public to authenticated, anon, service_role;
+create publication supabase_realtime;
+create table public.devices(id uuid primary key default gen_random_uuid(), owner_id uuid not null references auth.users(id) on delete cascade, device_name text not null, platform text not null default 'android', device_public_key text, created_at timestamptz not null default now(), last_seen timestamptz, revoked_at timestamptz);
+create table public.pairing_requests(id uuid primary key default gen_random_uuid(), owner_id uuid not null references auth.users(id) on delete cascade, requester_device_id uuid not null references devices(id) on delete cascade, target_device_id uuid not null references devices(id) on delete cascade, code_hash text not null, status text not null default 'pending' check (status in ('pending','approved','rejected','expired')), expires_at timestamptz not null default now()+interval '5 minutes', created_at timestamptz not null default now());
+create table public.remote_sessions(id uuid primary key default gen_random_uuid(), owner_id uuid not null references auth.users(id) on delete cascade, controller_device_id uuid not null references devices(id), agent_device_id uuid not null references devices(id), status text not null default 'pending' check (status in ('pending','active','ended','revoked')), created_at timestamptz not null default now(), expires_at timestamptz not null default now()+interval '1 hour', ended_at timestamptz, check (controller_device_id<>agent_device_id));
+create table public.signaling_messages(id uuid primary key default gen_random_uuid(), session_id uuid not null references remote_sessions(id) on delete cascade, sender_device_id uuid not null references devices(id), recipient_device_id uuid not null references devices(id), message_type text not null check (message_type in ('offer','answer','ice_candidate')), payload jsonb not null, created_at timestamptz not null default now());
+create table public.audit_logs(id uuid primary key default gen_random_uuid(), owner_id uuid not null references auth.users(id) on delete cascade, device_id uuid references devices(id) on delete set null, event_type text not null, details jsonb not null default '{}', created_at timestamptz not null default now());
+alter table devices enable row level security; alter table pairing_requests enable row level security; alter table remote_sessions enable row level security; alter table signaling_messages enable row level security; alter table audit_logs enable row level security;
+grant all on all tables in schema public to anon, authenticated, service_role;
+create policy devices_select_own on devices for select to authenticated using (owner_id=(select auth.uid()));
+create policy devices_insert_own on devices for insert to authenticated with check (owner_id=(select auth.uid()));
+create policy devices_update_own on devices for update to authenticated using (owner_id=(select auth.uid())) with check (owner_id=(select auth.uid()));
+create policy devices_delete_own on devices for delete to authenticated using (owner_id=(select auth.uid()));
+create policy pairing_select_own on pairing_requests for select to authenticated using (owner_id=(select auth.uid()));
+create policy pairing_update_own on pairing_requests for update to authenticated using (owner_id=(select auth.uid()));
+create policy sessions_select_own on remote_sessions for select to authenticated using (owner_id=(select auth.uid()));
+create policy sessions_update_own on remote_sessions for update to authenticated using (owner_id=(select auth.uid()));
+-- some "old" test rows
+insert into auth.users values ('aaaaaaaa-0000-0000-0000-000000000001'),('bbbbbbbb-0000-0000-0000-000000000002'),('cccccccc-0000-0000-0000-000000000003');
+insert into devices(id,owner_id,device_name) values ('a1000000-0000-0000-0000-000000000001','aaaaaaaa-0000-0000-0000-000000000001','Phone A'),('b2000000-0000-0000-0000-000000000002','bbbbbbbb-0000-0000-0000-000000000002','Phone B');
+insert into pairing_requests(id,owner_id,requester_device_id,target_device_id,code_hash) values ('d0000000-0000-0000-0000-000000000001','aaaaaaaa-0000-0000-0000-000000000001','a1000000-0000-0000-0000-000000000001','b2000000-0000-0000-0000-000000000002','h');

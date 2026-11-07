@@ -1,0 +1,12 @@
+# Functions verify the caller's JWT themselves (see functions/_shared/mod.ts),
+# which also works with the new publishable API keys.
+[functions.pairing-request]
+verify_jwt = false
+[functions.pairing-respond]
+verify_jwt = false
+[functions.session-end]
+verify_jwt = false
+[functions.send-signal]
+verify_jwt = false
+[functions.ice-config]
+verify_jwt = false
