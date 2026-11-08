@@ -28,7 +28,22 @@ jobs:
         env:
           # Public client key (publishable). Add it under Settings > Secrets and variables > Actions.
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
-        run: gradle assembleDebug --stacktrace
+        run: |
+          set -o pipefail
+          gradle assembleDebug --stacktrace --console=plain 2>&1 | tee build.log
+
+      # On failure, print the real cause at the top of the run page (Summary), no log digging needed.
+      - name: Summarize build errors
+        if: failure()
+        run: |
+          {
+            echo "## Build errors (copy this)"
+            echo '```'
+            grep -E "^e: " build.log | head -40 || true
+            sed -n '/What went wrong/,/Try:/p' build.log | head -30 || true
+            grep -E "AAPT|error:" build.log | head -20 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
