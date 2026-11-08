@@ -25,6 +25,7 @@ import com.sonicteam.sonicremote.data.Role
 import com.sonicteam.sonicremote.rtc.RtcDeps
 import com.sonicteam.sonicremote.rtc.TokenBridge
 import com.sonicteam.sonicremote.rtc.ViewerEngine
+import com.sonicteam.sonicremote.share.ControlState
 import com.sonicteam.sonicremote.share.ScreenShareService
 import com.sonicteam.sonicremote.data.parseTimeMs
 import kotlinx.coroutines.CancellationException
@@ -101,6 +102,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun stopShareService() {
+        ControlState.reset()
         ScreenShareService.stopLocal(getApplication())
     }
 

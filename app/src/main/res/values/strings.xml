@@ -24,9 +24,9 @@
     <string name="t6_body">To run the service we process your account email, your device name, and session records (who connected, when, and how it ended) in an audit log. Screen video travels directly between the two phones, or through a relay that cannot read it, and SONIC REMOTE does not record it.</string>
     <string name="t7_title">7. Your control</string>
     <string name="t7_body">You can stop sharing at any time with the Stop button or the notification action, end a session, or sign out whenever you want.</string>
-    <string name="t8_title">8. Changes</string>
-    <string name="t8_body">These terms may change. If they do, you will be asked to accept the new version.</string>
-    <string name="terms_version_note">Version 1 · November 2026</string>
+    <string name="t8_title">8. Remote control and support terminal</string>
+    <string name="t8_body">Remote control is OFF by default. It works only if the Agent first enables the SONIC REMOTE accessibility service in Android settings and then switches control ON for the current session. It performs only taps, swipes and Back/Home/Recents, can be switched off at any time, and ends with the session. The support terminal is a read-only diagnostics panel (device model, battery, network, storage, memory); it is not a shell and cannot run arbitrary commands. The Agent must allow it and can see which commands were run.</string>
+    <string name="terms_version_note">Version 2 · November 2026</string>
     <string name="terms_agree">I have read and I agree to these terms. I understand that SONICTEAM is not responsible for how I use the app.</string>
     <string name="terms_accept">Accept and continue</string>
     <string name="terms_decline">Decline and exit</string>
@@ -154,4 +154,38 @@
     <string name="viewer_waiting">Waiting for the Agent to start sharing…</string>
     <string name="viewer_connecting">Connecting…</string>
     <string name="viewer_failed">Connection failed. End the session and try again.</string>
+
+    <!-- Control / terminal / viewer tools -->
+    <string name="a11y_description">SONIC REMOTE uses this service only to perform taps, swipes and Back/Home/Recents that the other person sends during a support session you approved, and only while you switch remote control ON. It does not read your screen content, passwords or keystrokes.</string>
+    <string name="share_notif_text_control">Shared with %1$s · Remote control is ON</string>
+    <string name="vw_view_mode">View</string>
+    <string name="vw_control_mode">Control</string>
+    <string name="vw_rotate">Rotate</string>
+    <string name="vw_reset">Reset</string>
+    <string name="vw_fullscreen">Fullscreen</string>
+    <string name="vw_close">Close</string>
+    <string name="vw_in_fullscreen">Showing in fullscreen…</string>
+    <string name="vw_control_waiting">Control is off. Ask the Agent to allow it on their phone.</string>
+    <string name="vw_control_hint">Tap, long-press or drag on the screen to control the other phone.</string>
+    <string name="key_back">Back</string>
+    <string name="key_home">Home</string>
+    <string name="key_recents">Recents</string>
+    <string name="term_title">Support terminal</string>
+    <string name="term_waiting">The Agent has not allowed the terminal.</string>
+    <string name="term_hint">Read-only diagnostics, not a shell. Type help.</string>
+    <string name="term_input">Command</string>
+    <string name="term_send">Run</string>
+    <string name="term_allow">Allow the support terminal (read-only info)</string>
+    <string name="term_log_title">Commands run on your phone</string>
+    <string name="term_log_empty">None yet.</string>
+    <string name="ctl_title">Remote control</string>
+    <string name="ctl_need_service">To let the Controller tap and swipe on your phone, enable the SONIC REMOTE accessibility service. It only performs taps, swipes and Back/Home/Recents, only while you allow it, and it cannot read your screen content.</string>
+    <string name="ctl_restricted_note">On Android 13 and newer you may first need: Settings, Apps, SONIC REMOTE, the ⋮ menu, Allow restricted settings.</string>
+    <string name="ctl_open_settings">Open accessibility settings</string>
+    <string name="ctl_allow">Allow the Controller to control my phone (this session only)</string>
+    <string name="ctl_start_first">Start sharing first.</string>
+    <string name="ctl_on_banner">Remote control is ON</string>
+    <string name="ctl_revoke">Turn off control</string>
+    <string name="t9_title">9. Changes</string>
+    <string name="t9_body">These terms may change. If they do, you will be asked to accept the new version.</string>
 </resources>

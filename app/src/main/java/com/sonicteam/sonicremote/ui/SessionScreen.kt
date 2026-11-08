@@ -3,6 +3,8 @@ package com.sonicteam.sonicremote.ui
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
 import android.os.Build
@@ -17,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -43,28 +46,11 @@ import com.sonicteam.sonicremote.Screen
 import com.sonicteam.sonicremote.data.ActiveSession
 import com.sonicteam.sonicremote.data.Role
 import com.sonicteam.sonicremote.rtc.ViewerEngine
+import com.sonicteam.sonicremote.share.ControlState
 import com.sonicteam.sonicremote.share.ScreenShareService
 import com.sonicteam.sonicremote.share.ShareStatus
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
-
-@Composable
-fun RemoteVideo(engine: ViewerEngine, modifier: Modifier = Modifier) {
-    val track = engine.remoteTrack
-    val context = LocalContext.current
-    val renderer = remember { SurfaceViewRenderer(context) }
-    DisposableEffect(Unit) {
-        renderer.init(engine.eglBase.eglBaseContext, null)
-        renderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
-        renderer.setEnableHardwareScaler(true)
-        onDispose { renderer.release() }
-    }
-    DisposableEffect(track) {
-        track?.addSink(renderer)
-        onDispose { track?.removeSink(renderer) }
-    }
-    AndroidView(factory = { renderer }, modifier = modifier)
-}
 
 @Composable
 private fun AgentControls(vm: AppViewModel, s: ActiveSession) {
@@ -124,30 +110,60 @@ private fun AgentControls(vm: AppViewModel, s: ActiveSession) {
     }
 }
 
+
 @Composable
-private fun ViewerPanel(engine: ViewerEngine) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(440.dp)
-            .clip(RoundedCornerShape(18.dp))
-            .background(Color.Black),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (engine.remoteTrack != null) RemoteVideo(engine, Modifier.fillMaxWidth().height(440.dp))
-        if (engine.state != ViewerEngine.State.Live) {
-            val msg = when (engine.state) {
-                ViewerEngine.State.Failed -> R.string.viewer_failed
-                ViewerEngine.State.Connecting -> R.string.viewer_connecting
-                else -> R.string.viewer_waiting
+private fun AgentConsentCards() {
+    val ctx = LocalContext.current
+    val share by ShareStatus.state.collectAsState()
+    val serviceOn by ControlState.serviceConnected.collectAsState()
+    val control by ControlState.control.collectAsState()
+    val terminal by ControlState.terminal.collectAsState()
+    val log by ControlState.termLog.collectAsState()
+    val live = share == ShareStatus.State.Live
+
+    InfoCard {
+        Text(stringResource(R.string.ctl_title), color = SonicColors.Accent, fontWeight = FontWeight.Bold)
+        if (!serviceOn) {
+            Text(stringResource(R.string.ctl_need_service), color = SonicColors.Silver, fontSize = 13.sp, modifier = Modifier.padding(top = 6.dp))
+            Text(stringResource(R.string.ctl_restricted_note), color = SonicColors.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 6.dp))
+            OutlinedButton(
+                onClick = { ctx.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) },
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+            ) { Text(stringResource(R.string.ctl_open_settings)) }
+        } else {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 6.dp)) {
+                Text(stringResource(R.string.ctl_allow), fontSize = 14.sp, modifier = Modifier.weight(1f))
+                Switch(checked = control, enabled = live, onCheckedChange = { ControlState.control.value = it })
             }
-            Text(
-                stringResource(msg),
-                color = if (engine.state == ViewerEngine.State.Failed) SonicColors.Danger else SonicColors.Silver,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(24.dp),
-            )
+            if (!live) Text(stringResource(R.string.ctl_start_first), color = SonicColors.Muted, fontSize = 12.sp)
+            if (control) {
+                Text(
+                    "● " + stringResource(R.string.ctl_on_banner),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp).clip(RoundedCornerShape(10.dp)).background(SonicColors.Danger).padding(12.dp),
+                )
+                Button(
+                    onClick = { ControlState.control.value = false },
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                ) { Text(stringResource(R.string.ctl_revoke)) }
+            }
         }
+    }
+
+    InfoCard {
+        Text(stringResource(R.string.term_title), color = SonicColors.Accent, fontWeight = FontWeight.Bold)
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 6.dp)) {
+            Text(stringResource(R.string.term_allow), fontSize = 14.sp, modifier = Modifier.weight(1f))
+            Switch(checked = terminal, enabled = live, onCheckedChange = { ControlState.terminal.value = it })
+        }
+        Text(stringResource(R.string.term_log_title), color = SonicColors.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp))
+        Text(
+            if (log.isEmpty()) stringResource(R.string.term_log_empty) else log.takeLast(8).joinToString("\n") { "$ $it" },
+            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+            fontSize = 12.sp,
+            color = SonicColors.Silver,
+        )
     }
 }
 
@@ -176,7 +192,12 @@ fun SessionScreen(vm: AppViewModel, onToggleLanguage: () -> Unit) {
             )
         }
 
-        if (s.role == Role.Agent) AgentControls(vm, s) else ViewerPanel(vm.viewer)
+        if (s.role == Role.Agent) {
+            AgentControls(vm, s)
+            AgentConsentCards()
+        } else {
+            ViewerPanel(vm.viewer)
+        }
 
         vm.pairingMessage?.let { Text(stringResource(fnErrorRes(it)), color = SonicColors.Danger, fontSize = 13.sp) }
 

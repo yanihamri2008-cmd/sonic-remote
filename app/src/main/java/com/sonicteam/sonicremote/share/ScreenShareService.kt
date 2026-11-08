@@ -8,6 +8,9 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.content.res.Configuration
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import android.media.projection.MediaProjection
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -36,10 +39,14 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import java.nio.ByteBuffer
 import org.json.JSONObject
+import org.webrtc.DataChannel
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.EglBase
@@ -76,6 +83,9 @@ class ScreenShareService : Service() {
     private var track: VideoTrack? = null
     private var pc: PeerConnection? = null
     private var channel: SignalingChannel? = null
+    private var dc: DataChannel? = null
+    private var permsJob: Job? = null
+    private var peerName = ""
     private var remoteSet = false
     private val pendingIce = mutableListOf<IceCandidate>()
 
@@ -104,6 +114,8 @@ class ScreenShareService : Service() {
         }
         running = true
         sessionId = sid
+        peerName = peer
+        ControlState.reset() // control/terminal always start OFF for every session
         ShareStatus.state.value = ShareStatus.State.Starting
 
         // The visible notification must exist BEFORE the screen is captured.
@@ -168,6 +180,13 @@ class ScreenShareService : Service() {
         }) ?: throw IllegalStateException("peer connection failed")
         pc = conn
         conn.addTrack(t, listOf("sonic-stream"))
+        dc = conn.createDataChannel("sonic", DataChannel.Init())?.also { attach(it) }
+        permsJob = scope.launch {
+            combine(ControlState.control, ControlState.terminal) { c, tm -> c to tm }.collect {
+                sendPerms()
+                refreshNotification()
+            }
+        }
 
         channel = SignalingChannel(deps, scope, sessionId, deviceId) { onSignal(it) }.also { it.start() }
 
@@ -195,11 +214,86 @@ class ScreenShareService : Service() {
 
     /** Screen size capped at 1280 px on the long side to keep bandwidth reasonable. */
     private fun captureSize(): Pair<Int, Int> {
-        val dm = resources.displayMetrics
-        val scale = min(1f, 1280f / max(dm.widthPixels, dm.heightPixels))
-        val w = (dm.widthPixels * scale).toInt() and 1.inv()
-        val h = (dm.heightPixels * scale).toInt() and 1.inv()
+        val (rw, rh) = realSize()
+        val scale = min(1f, 1280f / max(rw, rh))
+        val w = (rw * scale).toInt() and 1.inv()
+        val h = (rh * scale).toInt() and 1.inv()
         return w to h
+    }
+
+    // ------------------------------------------------- data channel (control + terminal)
+
+    private fun attach(ch: DataChannel) {
+        ch.registerObserver(object : DataChannel.Observer {
+            override fun onBufferedAmountChange(p0: Long) {}
+
+            override fun onStateChange() {
+                if (ch.state() == DataChannel.State.OPEN) scope.launch { sendPerms() }
+            }
+
+            override fun onMessage(p0: DataChannel.Buffer?) {
+                val b = p0 ?: return
+                if (b.data.remaining() > 4096) return
+                val bytes = ByteArray(b.data.remaining())
+                b.data.get(bytes)
+                val text = String(bytes, Charsets.UTF_8)
+                scope.launch { handleCommand(text) }
+            }
+        })
+    }
+
+    private fun sendJson(o: JSONObject) {
+        val ch = dc ?: return
+        if (ch.state() != DataChannel.State.OPEN) return
+        ch.send(DataChannel.Buffer(ByteBuffer.wrap(o.toString().toByteArray(Charsets.UTF_8)), false))
+    }
+
+    private fun sendPerms() {
+        sendJson(
+            JSONObject().put("t", "perm")
+                .put("control", ControlState.control.value)
+                .put("term", ControlState.terminal.value)
+        )
+    }
+
+    /** Every command is checked against the Agent's current consent switches before it does anything. */
+    private fun handleCommand(text: String) {
+        val j = try { JSONObject(text) } catch (e: Exception) { return }
+        when (j.optString("t")) {
+            "hello" -> sendPerms()
+            "tap", "long", "swipe", "key" -> {
+                if (ControlState.control.value) {
+                    val (w, h) = realSize()
+                    ControlExecutor.run(j, w, h)
+                }
+            }
+            "term" -> {
+                val id = j.optInt("id", 0)
+                val cmd = j.optString("cmd").take(40)
+                val out = if (ControlState.terminal.value) {
+                    ControlState.log(cmd)
+                    Diagnostics.run(this, cmd)
+                } else {
+                    "The Agent has not allowed the terminal."
+                }
+                sendJson(JSONObject().put("t", "term_out").put("id", id).put("text", out))
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun realSize(): Pair<Int, Int> {
+        val dm = DisplayMetrics()
+        (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getRealMetrics(dm)
+        return dm.widthPixels to dm.heightPixels
+    }
+
+    /** The phone was rotated: resize the capture so the stream is not stretched. */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val cap = capturer ?: return
+        val (w, h) = captureSize()
+        runCatching { cap.changeCaptureFormat(w, h, 15) }
     }
 
     // ------------------------------------------------------------------- stop
@@ -221,6 +315,10 @@ class ScreenShareService : Service() {
     }
 
     private fun teardown() {
+        permsJob?.cancel(); permsJob = null
+        runCatching { dc?.close() }
+        runCatching { dc?.dispose() }; dc = null
+        ControlState.reset()
         channel?.stop(); channel = null
         runCatching { capturer?.stopCapture() }
         runCatching { capturer?.dispose() }; capturer = null
@@ -246,6 +344,11 @@ class ScreenShareService : Service() {
 
     // ----------------------------------------------------------- notification
 
+    private fun refreshNotification() {
+        if (!running) return
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(NOTIFICATION_ID, buildNotification(peerName))
+    }
+
     private fun buildNotification(peer: String): Notification {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.createNotificationChannel(
@@ -262,7 +365,9 @@ class ScreenShareService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_share)
             .setContentTitle(getString(R.string.share_notif_title))
-            .setContentText(getString(R.string.share_notif_text, peer))
+            .setContentText(
+                getString(if (ControlState.control.value) R.string.share_notif_text_control else R.string.share_notif_text, peer)
+            )
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)

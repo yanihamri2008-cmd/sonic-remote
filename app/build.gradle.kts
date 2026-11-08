@@ -22,8 +22,8 @@ android {
         applicationId = "com.sonicteam.sonicremote"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "0.4.0"
+        versionCode = 5
+        versionName = "0.5.0"
 
         buildConfigField("String", "SUPABASE_URL", "\"${cfg("SUPABASE_URL", "https://afbhqesmbjxelnyzxjkc.supabase.co")}\"")
         buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", "\"${cfg("SUPABASE_PUBLISHABLE_KEY")}\"")

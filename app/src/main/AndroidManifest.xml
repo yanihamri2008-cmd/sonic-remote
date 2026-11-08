@@ -32,6 +32,20 @@
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
+        <!-- Optional, user-enabled service: taps/swipes only while the Agent allows control -->
+        <service
+            android:name=".share.SonicAccessibilityService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
         <!-- Lets the in-app language choice persist on Android < 13 -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

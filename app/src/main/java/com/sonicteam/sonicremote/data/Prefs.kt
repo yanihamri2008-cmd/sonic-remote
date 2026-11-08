@@ -23,7 +23,7 @@ class Prefs(context: Context) {
 
     companion object {
         /** Bump this number whenever the terms text changes: everyone is asked to accept again. */
-        const val TERMS_VERSION = 1
+        const val TERMS_VERSION = 2
         private const val KEY_TERMS = "terms_version"
     }
 }

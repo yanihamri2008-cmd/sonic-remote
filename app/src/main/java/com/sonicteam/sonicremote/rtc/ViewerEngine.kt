@@ -2,11 +2,14 @@ package com.sonicteam.sonicremote.rtc
 
 import android.content.Context
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.nio.ByteBuffer
 import org.json.JSONObject
+import org.webrtc.DataChannel
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.EglBase
@@ -30,7 +33,16 @@ class ViewerEngine(
     var remoteTrack by mutableStateOf<VideoTrack?>(null)
         private set
 
+    /** What the Agent currently allows (they can change it at any time). */
+    var controlAllowed by mutableStateOf(false)
+        private set
+    var termAllowed by mutableStateOf(false)
+        private set
+    val termLog = mutableStateListOf<String>()
+    private var nextTermId = 1
+
     val eglBase: EglBase by lazy { EglBase.create() }
+    private var dataChannel: DataChannel? = null
 
     private var factory: PeerConnectionFactory? = null
     private var pc: PeerConnection? = null
@@ -76,6 +88,24 @@ class ViewerEngine(
                     scope.launch { channel?.send("ice_candidate", candidateJson(c)) }
                 }
 
+                override fun onDataChannel(p0: DataChannel?) {
+                    val ch = p0 ?: return
+                    dataChannel = ch
+                    ch.registerObserver(object : DataChannel.Observer {
+                        override fun onBufferedAmountChange(p0: Long) {}
+                        override fun onStateChange() {
+                            if (ch.state() == DataChannel.State.OPEN) send(JSONObject().put("t", "hello"))
+                        }
+                        override fun onMessage(p0: DataChannel.Buffer?) {
+                            val b = p0 ?: return
+                            if (b.data.remaining() > 16384) return
+                            val bytes = ByteArray(b.data.remaining())
+                            b.data.get(bytes)
+                            onData(String(bytes, Charsets.UTF_8))
+                        }
+                    })
+                }
+
                 override fun onTrack(transceiver: RtpTransceiver?) {
                     (transceiver?.receiver?.track() as? VideoTrack)?.let { remoteTrack = it }
                 }
@@ -103,7 +133,67 @@ class ViewerEngine(
         }
     }
 
+    // ------------------------------------------------ control + terminal messages
+
+    private fun send(o: JSONObject): Boolean {
+        val ch = dataChannel ?: return false
+        if (ch.state() != DataChannel.State.OPEN) return false
+        return ch.send(DataChannel.Buffer(ByteBuffer.wrap(o.toString().toByteArray(Charsets.UTF_8)), false))
+    }
+
+    private fun onData(text: String) {
+        val j = try { JSONObject(text) } catch (e: Exception) { return }
+        when (j.optString("t")) {
+            "perm" -> {
+                controlAllowed = j.optBoolean("control", false)
+                termAllowed = j.optBoolean("term", false)
+            }
+            "term_out" -> {
+                j.optString("text").split("\n").forEach { termLog.add(it) }
+                while (termLog.size > 200) termLog.removeAt(0)
+            }
+        }
+    }
+
+    // Coordinates are normalized (0..1) in the Agent's screen space; the Agent re-checks consent.
+    fun sendTap(x: Float, y: Float) {
+        if (controlAllowed) send(JSONObject().put("t", "tap").put("x", x.toDouble()).put("y", y.toDouble()))
+    }
+
+    fun sendLong(x: Float, y: Float) {
+        if (controlAllowed) send(JSONObject().put("t", "long").put("x", x.toDouble()).put("y", y.toDouble()))
+    }
+
+    fun sendSwipe(x1: Float, y1: Float, x2: Float, y2: Float, durationMs: Long) {
+        if (controlAllowed) {
+            send(
+                JSONObject().put("t", "swipe").put("x1", x1.toDouble()).put("y1", y1.toDouble())
+                    .put("x2", x2.toDouble()).put("y2", y2.toDouble()).put("d", durationMs.coerceIn(50L, 1500L))
+            )
+        }
+    }
+
+    fun sendKey(name: String) {
+        if (controlAllowed) send(JSONObject().put("t", "key").put("k", name))
+    }
+
+    fun runTerm(cmd: String) {
+        val c = cmd.trim().take(40)
+        if (c.isEmpty()) return
+        if (c == "clear") { termLog.clear(); return }
+        termLog.add("$ $c")
+        if (!send(JSONObject().put("t", "term").put("id", nextTermId++).put("cmd", c))) {
+            termLog.add("(not connected)")
+        }
+    }
+
     fun stop() {
+        runCatching { dataChannel?.close() }
+        runCatching { dataChannel?.dispose() }
+        dataChannel = null
+        controlAllowed = false
+        termAllowed = false
+        termLog.clear()
         channel?.stop()
         channel = null
         remoteTrack = null

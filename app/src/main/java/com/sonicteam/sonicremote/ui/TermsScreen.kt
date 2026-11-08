@@ -37,6 +37,7 @@ private val sections = listOf(
     R.string.t6_title to R.string.t6_body,
     R.string.t7_title to R.string.t7_body,
     R.string.t8_title to R.string.t8_body,
+    R.string.t9_title to R.string.t9_body,
 )
 
 /**
